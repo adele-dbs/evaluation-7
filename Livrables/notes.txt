@@ -1,0 +1,62 @@
+Installation Symfony avec Symfony CLI
+
+Pour créer un nouveau porjet : 
+symfony new mon_projet --version=5.4 –webapp (utiliser Git Bah)
+
+Pour lancer le serveur : 
+symfony server:start -d
+http://127.0.0.1:8000/
+
+Version : Symfony 6.3.8
+
+Installer le système n'annotations : (replacé par les attributd)
+composer require doctrine/annotations
+
+Installer MakeBundle : 
+composer require --dev symfony/maker-bundle
+
+Pour créer un nouveau controleur : 
+php bin/console make:controller NewController
+
+Pour créer un CRUD d'une entité existante dans un nouveau controleur + 1 twig par action : 
+php bin/console make:crud Figure
+
+Installer Twig : 
+composer require “twig/twig:^3.0”
+
+Installer Doctine : 
+$ composer require symfony/orm-pack
+$ composer require --dev symfony/maker-bundle
+
+Créer la base de données: 
+cd C:\wamp64\bin\mysql\mysql8.0.31\bin
+mysql -u root -p
+CREATE DATABASE trt_conseil;
+
+Configurer connection à la BDD:
+fichier .env
+
+Créer une entité : 
+php bin/console make:entity
+suivre les questions
+
+Pour synchroniser le projet avec bdd
+php bin/console make:migration 
+php bin/console doctrine:migrations:migrate
+
+Créer une entité User : 
+composer require symfony/security-bundle
+php bin/console make:user
+php bin/console make:migration 
+php bin/console doctrine:migrations:migrate
+php bin/console make:crud User pour créer le controleur User
+
+Créer un formulaire :
+composer require Symfony/form
+php bin/console make:form
+
+Modifier la bdd?
+php bin/console schema:update --force
+
+Créer les routes : 
+config/routes.yaml

@@ -1,0 +1,26 @@
+installer Symfony et ses dépendances
+
+Paramétrer la BDD dans .env
+
+Créer la BDD
+Créer Entity User
+Crére les autres entités
+Syncroniser BDD
+
+Créer les routes dans : config/routes.yaml
+
+Créer les controleurs
+
+Créer les formulaires
+
+Créer le layout :  
+ base.html.twig
+
+Créer les vues qui héritent de la base : 
+{% extends 'base.html.twig' %}
+
+Créer le système d'authentification : 
+créer formulaire d'inscription et d'authentification
+
+Sécuriser les accès : 
+config/packages/security.yaml 

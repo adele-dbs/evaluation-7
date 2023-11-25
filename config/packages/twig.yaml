@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    # pour créer un variable gobale utilisable dans tout le projet :
+    globals: 
+        titre: ‘le titre que je veux réutiliser’
 
 when@test:
     twig:
