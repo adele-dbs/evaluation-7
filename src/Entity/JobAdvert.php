@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JobAdvertRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,11 +31,19 @@ class JobAdvert
     #[ORM\Column]
     private ?int $wages = null;
 
-    #[ORM\Column]
-    private ?int $recuitment_id = null;
+    #[ORM\ManyToOne(inversedBy: 'job_advert_id')]
+    private ?ValidationStatus $validation = null;
 
-    #[ORM\Column]
-    private ?int $validation_id = null;
+    #[ORM\ManyToOne(inversedBy: 'job_id')]
+    private ?Recruitment $recruitment = null;
+
+    #[ORM\OneToMany(mappedBy: 'application_id', targetEntity: Application::class)]
+    private Collection $job_advert;
+
+    public function __construct()
+    {
+        $this->job_advert = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,26 +110,56 @@ class JobAdvert
         return $this;
     }
 
-    public function getRecuitmentId(): ?int
+    public function getValidation(): ?ValidationStatus
     {
-        return $this->recuitment_id;
+        return $this->validation;
     }
 
-    public function setRecuitmentId(int $recuitment_id): static
+    public function setValidation(?ValidationStatus $validation): static
     {
-        $this->recuitment_id = $recuitment_id;
+        $this->validation = $validation;
 
         return $this;
     }
 
-    public function getValidationId(): ?int
+    public function getRecruitment(): ?Recruitment
     {
-        return $this->validation_id;
+        return $this->recruitment;
     }
 
-    public function setValidationId(int $validation_id): static
+    public function setRecruitment(?Recruitment $recruitment): static
     {
-        $this->validation_id = $validation_id;
+        $this->recruitment = $recruitment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getJobAdvert(): Collection
+    {
+        return $this->job_advert;
+    }
+
+    public function addJobAdvert(Application $jobAdvert): static
+    {
+        if (!$this->job_advert->contains($jobAdvert)) {
+            $this->job_advert->add($jobAdvert);
+            $jobAdvert->setJobAdvert($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobAdvert(Application $jobAdvert): static
+    {
+        if ($this->job_advert->removeElement($jobAdvert)) {
+            // set the owning side to null (unless already changed)
+            if ($jobAdvert->getJobAdvert() === $this) {
+                $jobAdvert->setJobAdvert(null);
+            }
+        }
 
         return $this;
     }

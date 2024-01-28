@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecruitmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecruitmentRepository::class)]
@@ -25,8 +27,16 @@ class Recruitment
     #[ORM\Column]
     private ?int $zip_code = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'recruitment', targetEntity: JobAdvert::class)]
+    private Collection $job_id;
+
+    public function __construct()
+    {
+        $this->job_id = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -81,14 +91,44 @@ class Recruitment
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobAdvert>
+     */
+    public function getJobId(): Collection
+    {
+        return $this->job_id;
+    }
+
+    public function addJobId(JobAdvert $jobId): static
+    {
+        if (!$this->job_id->contains($jobId)) {
+            $this->job_id->add($jobId);
+            $jobId->setRecruitment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobId(JobAdvert $jobId): static
+    {
+        if ($this->job_id->removeElement($jobId)) {
+            // set the owning side to null (unless already changed)
+            if ($jobId->getRecruitment() === $this) {
+                $jobId->setRecruitment(null);
+            }
+        }
 
         return $this;
     }

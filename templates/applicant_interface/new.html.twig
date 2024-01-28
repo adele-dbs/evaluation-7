@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Application{% endblock %}
+
+{% block body %}
+    <h1>Create new Application</h1>
+
+    {{ include('applicant_interface/_form.html.twig') }}
+
+    <a href="{{ path('app_applicant_interface_index') }}">back to list</a>
+{% endblock %}

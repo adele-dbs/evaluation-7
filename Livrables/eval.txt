@@ -1,13 +1,27 @@
-installer Symfony et ses dépendances
+Dans un premier temps, j'ai installé Symfony avec Symfony CLI.
 
-Paramétrer la BDD dans .env
+J'ai ensuite créé mon projet : symfony new trt_conseil --webapp
 
-Créer la BDD
-Créer Entity User
-Crére les autres entités
-Syncroniser BDD
+Après, j'ai configuré l'URL vers la base de données dans le fichier .env.
 
-Créer les routes dans : config/routes.yaml
+J'ai ensuite créer les entitées avec leurs relationsen utilisant la commande php bin/console make:entity.
+J'ai commencé par l'entité User.
+J'ai commencé par installer un pack de sécurité : composer require symfony/security-bundle
+
+J'ai ensuite créé la base de données en utilisant les commandes suivantes: 
+1. php bin/console doctrine:database:create
+2. php bin/console make:migration
+3. php bin/console doctrine:migrations:migrate
+
+Puis, j'ai créé les routes dans le fichier : config/routes.yaml
+
+//
+Créer Entity User + Sécurité + Authentification
+
+
+Créer les cruds
+
+
 
 Créer les controleurs
 
@@ -22,5 +36,5 @@ Créer les vues qui héritent de la base :
 Créer le système d'authentification : 
 créer formulaire d'inscription et d'authentification
 
-Sécuriser les accès : 
+Sécuriser les accès (rôles) : 
 config/packages/security.yaml 

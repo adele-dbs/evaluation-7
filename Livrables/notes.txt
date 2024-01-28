@@ -1,7 +1,8 @@
 Installation Symfony avec Symfony CLI
 
 Pour créer un nouveau porjet : 
-symfony new mon_projet --version=5.4 –webapp (utiliser Git Bah)
+symfony new mon_projet --version=5.4 –webapp
+symfony new trtconseil --webapp  (utiliser Git Bah)
 
 Pour lancer le serveur : 
 symfony server:start -d
@@ -9,7 +10,7 @@ http://127.0.0.1:8000/
 
 Version : Symfony 6.3.8
 
-Installer le système n'annotations : (replacé par les attributd)
+Installer le système d'annotations : (replacé par les attributd)
 composer require doctrine/annotations
 
 Installer MakeBundle : 
@@ -19,7 +20,7 @@ Pour créer un nouveau controleur :
 php bin/console make:controller NewController
 
 Pour créer un CRUD d'une entité existante dans un nouveau controleur + 1 twig par action : 
-php bin/console make:crud Figure
+php bin/console make:crud
 
 Installer Twig : 
 composer require “twig/twig:^3.0”
@@ -44,12 +45,19 @@ Pour synchroniser le projet avec bdd
 php bin/console make:migration 
 php bin/console doctrine:migrations:migrate
 
-Créer une entité User : 
+Créer une entité User + Sécurité + connection : 
 composer require symfony/security-bundle
 php bin/console make:user
 php bin/console make:migration 
 php bin/console doctrine:migrations:migrate
-php bin/console make:crud User pour créer le controleur User
+php bin/console make:crud User pour créer le controleur User et le CRUD
+composer require symfony/http-foundation pour la sécurité
+composer require symfony/security-csrf
+symfony console make:auth pour l'authentification
+composer require validator pour pourvoir s'inscrire
+composer require form
+Symfony console make:registration-form
+
 
 Créer un formulaire :
 composer require Symfony/form
@@ -60,3 +68,30 @@ php bin/console schema:update --force
 
 Créer les routes : 
 config/routes.yaml
+
+Outil de débugage : 
+Profiler
+composer require --dev symfony/profiler-pack
+composer require debug --dev
+symfony serve
+
+Validation des données: 
+composer require symfony/validator doctrine/annotations
+use Symfony\Component\validator\Constraints as Assert;
+
+Pour débuger les contraites : 
+php bin/console debug:validator ‘App\Entity\nom_entité’
+
+Envoyer un email : 
+$ composer require  symfony/mailer
+$ composer require twig/inky-extra 
+$ composer require twig/extra-bundle
+
+Event : 
+php bin/console debug:event-dispatcher : pour connatitre tous les events de l'appli
+
+
+A faire : 
+- logout
+- choix rôle lors de la création de compte
+ajouter statut validation au tableau User

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ApplicationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApplicationRepository::class)]
@@ -13,52 +15,72 @@ class Application
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $applicant_id = null;
+    #[ORM\ManyToOne(inversedBy: 'application_id')]
+    private ?ValidationStatus $validation = null;
 
-    #[ORM\Column]
-    private ?int $id_job_advert = null;
+    #[ORM\ManyToMany(targetEntity: Applicant::class, mappedBy: 'application_id')]
+    private Collection $applicants;
 
-    #[ORM\Column]
-    private ?int $validation_id = null;
+    #[ORM\ManyToOne(inversedBy: 'application_id')]
+    private ?JobAdvert $job_advert = null;
+
+    public function __construct()
+    {
+        $this->applicants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getApplicantId(): ?int
+    public function getValidation(): ?ValidationStatus
     {
-        return $this->applicant_id;
+        return $this->validation;
     }
 
-    public function setApplicantId(int $applicant_id): static
+    public function setValidation(?ValidationStatus $validation): static
     {
-        $this->applicant_id = $applicant_id;
+        $this->validation = $validation;
 
         return $this;
     }
 
-    public function getIdJobAdvert(): ?int
+    /**
+     * @return Collection<int, Applicant>
+     */
+    public function getApplicants(): Collection
     {
-        return $this->id_job_advert;
+        return $this->applicants;
     }
 
-    public function setIdJobAdvert(int $id_job_advert): static
+    public function addApplicant(Applicant $applicant): static
     {
-        $this->id_job_advert = $id_job_advert;
+        if (!$this->applicants->contains($applicant)) {
+            $this->applicants->add($applicant);
+            $applicant->addApplicationId($this);
+        }
 
         return $this;
     }
 
-    public function getValidationId(): ?int
+    public function removeApplicant(Applicant $applicant): static
     {
-        return $this->validation_id;
+        if ($this->applicants->removeElement($applicant)) {
+            $applicant->removeApplicationId($this);
+        }
+
+        return $this;
     }
 
-    public function setValidationId(int $validation_id): static
+    public function getJobAdvert(): ?JobAdvert
     {
-        $this->validation_id = $validation_id;
+        return $this->job_advert;
+    }
+
+    public function setJobAdvert(?JobAdvert $job_advert): static
+    {
+        $this->job_advert = $job_advert;
 
         return $this;
     }
